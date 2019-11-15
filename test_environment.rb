@@ -1,35 +1,40 @@
-def create_ship_3
-    keys = ["0", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J"]
-    vert_or_hor = rand(1..2)
-    if vert_or_hor == 1
-        vert_y_coors = []
-        vert_num_y = rand(2..9)
-        vert_y_coors.push(keys[vert_num_y - 1])
-        vert_y_coors.push(keys[vert_num_y])
-        vert_y_coors.push(keys[vert_num_y + 1])
-        
-        vert_num_x = rand(0..9)
+game_board = {
+    "0" => ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"],
+    "A" => ["~", "~", "~", "~", "~", "~", "~", "~", "~", "~"], 
+    "B" => ["~", "~", "~", "~", "~", "~", "~", "~", "~", "~"],
+    "C" => ["~", "~", "~", "~", "~", "~", "~", "~", "~", "~"], 
+    "D" => ["~", "~", "~", "~", "~", "~", "~", "~", "~", "~"], 
+    "E" => ["~", "~", "~", "~", "~", "~", "~", "~", "~", "~"],
+    "F" => ["~", "~", "~", "~", "~", "~", "~", "~", "~", "~"], 
+    "G" => ["~", "~", "~", "~", "~", "~", "~", "~", "~", "~"], 
+    "H" => ["~", "~", "~", "~", "~", "~", "~", "~", "~", "~"], 
+    "I" => ["~", "~", "~", "~", "~", "~", "~", "~", "~", "~"], 
+    "J" => ["~", "~", "~", "~", "~", "~", "~", "~", "~", "~"],
+    }
+    def draw_board(board)
+                
+        board.each do |label, array|
+            print "\n"
+            print label 
+            array.each do |column| 
+                print column
+            end 
+            print "\n"
+        end 
+    end   
 
-        vert_coors = {}
-        vert_coors[vert_y_coors[0]] = vert_num_x
-        vert_coors[vert_y_coors[1]] = vert_num_x
-        vert_coors[vert_y_coors[2]] = vert_num_x
+draw_board(game_board)
 
-        print vert_coors
+    puts "Enter coordinates for beginning of ship: (ie. 'A4')"
+    user_ship_three_beg = gets.chomp.split(//,2)
+    letter = user_ship_three_beg[0]
+    number = user_ship_three_beg[1].to_i - 1
 
-    else 
-        hor_num_x = rand(1..9)
-        hor_x_coors = []
-        hor_x_coors.push(hor_num_x - 1)
-        hor_x_coors.push(hor_num_x)
-        hor_x_coors.push(hor_num_x +1)
+    puts "letter: #{letter} number: #{number}"
 
-        hor_coors = {}
-        hor_coors[keys[rand(1..10)]] = hor_x_coors
+    game_board[letter][number] = "X"
 
-        print hor_coors
-    end 
-end 
+draw_board(game_board)
 
-create_ship_3
+
 
