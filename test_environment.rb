@@ -9,6 +9,8 @@ VERTICAL_ORIENTATION = 1
 HORIZONTAL_ORIENTATION = 2
 
 class Ship 
+attr_reader :coordinates
+
     def initialize()
         @size = 3
         @orientation = rand(VERTICAL_ORIENTATION..HORIZONTAL_ORIENTATION) 
@@ -26,21 +28,21 @@ class Ship
     end 
 
     def get_coordinates()
-        coordinates = []
+        @coordinates = []
         row = @start_coor[0]
         col = @start_coor[1]
         if @orientation == 1
             coor_second = [row + 1, col]
             coor_third = [row + 2, col]
-            coordinates.push(@start_coor)
-            coordinates.push(coor_second)
-            coordinates.push(coor_third)
+            @coordinates.push(@start_coor)
+            @coordinates.push(coor_second)
+            @coordinates.push(coor_third)
         elsif @orientation == 2
             coor_second = [row, col + 1]
             coor_third = [row, col + 2]
-            coordinates.push(@start_coor)
-            coordinates.push(coor_second)
-            coordinates.push(coor_third)
+            @coordinates.push(@start_coor)
+            @coordinates.push(coor_second)
+            @coordinates.push(coor_third)
         else 
         end 
     end 
@@ -72,7 +74,12 @@ class Board
         end 
     end  
 
-    def draw_ship()
+    def draw_ship(ship)
+        ship.coordinates.each do |coor|
+            row = coor[0]
+            col = coor[1]
+            @game_board[row][col] = "S"
+        end 
     end 
 
     def shoot()
@@ -86,80 +93,13 @@ class Board
 
 end 
 
-# draw_board(game_board)
-
 ship1 = Ship.new()
 ship1.get_start_coordinates()
 ship1.get_coordinates()
 
 player1 = Board.new 
 
+player1.draw_ship(ship1)
+
 player1.draw_board()
 
-#     puts "Enter coordinates for beginning of ship: (ie. 'A4')"
-#     user_ship_three_beg = gets.chomp.split(//,2)
-#     letter = user_ship_three_beg[0]
-#     number = user_ship_three_beg[1].to_i - 1
-
-#     puts "letter: #{letter} number: #{number}"
-
-#     game_board[letter][number] = "X"
-
-# draw_board(game_board)
-# MIN_ROW_FOR_SHIP=1
-# MAX_ROW_FOR_SHIP=10
-
-# def ship_coors
-#     keys = ["0", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J"]
-#     vert_or_hor = rand(1..2)
-#     if vert_or_hor == 1
-
-#         vert_y_coors = []
-#         vert_start_row = rand(MIN_ROW_FOR_VERTICAL_SHIP+1..MAX_ROW_FOR_VERTICAL_SHIP-1)
-#         vert_y_coors.push(keys[vert_start_row - 1])
-#         vert_y_coors.push(keys[vert_start_row])
-#         vert_y_coors.push(keys[vert_start_row + 1])
-        
-#         vert_num_x = rand(0..9)
-
-#         coors = {}
-#         coors[vert_y_coors[0]] = vert_num_x
-#         coors[vert_y_coors[1]] = vert_num_x
-#         coors[vert_y_coors[2]] = vert_num_x
-
-#         return coors
-
-#     else 
-#         hor_num_x = rand(1..9)
-#         hor_x_coors = []
-#         hor_x_coors.push(hor_num_x - 1)
-#         hor_x_coors.push(hor_num_x)
-#         hor_x_coors.push(hor_num_x +1)
-
-#         coors = {}
-#         coors[keys[rand(MIN_ROW_FOR_VERTICAL_SHIP..MAX_ROW_FOR_VERTICAL_SHIP)]] = hor_x_coors
-
-#         return coors
-#     end 
-# end
-
-# def ship_launch(coors)
-#     coors.each do |key, value|
-#         if coors[key].class == Array
-#             letter = key
-#             number_0 = coors[key][0]
-#             number_1 = coors[key][1]
-#             number_2 = coors[key][2]
-#             return letter, number_0, number_1, number_2
-#         else 
-#             array_1 = []
-#             for i in coors do
-#                 array_1.push(key)
-#             end
-#             print array_1
-#         end
-#     end
-# end 
-
-# coors = ship_coors()
-# ship_launch(coors)
