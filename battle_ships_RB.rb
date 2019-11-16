@@ -49,6 +49,8 @@ attr_reader :coordinates
 end 
 
 class Board
+attr_reader :game_end_counter
+
     def initialize()
     @game_board = [
         ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10"],
@@ -63,6 +65,7 @@ class Board
         ["I", "~", "~", "~", "~", "~", "~", "~", "~", "~", "~"], 
         ["J", "~", "~", "~", "~", "~", "~", "~", "~", "~", "~"],
         ]
+    @game_end_counter = 3
     end 
 
     def draw_board()      
@@ -75,10 +78,10 @@ class Board
 
     def draw_board_hidden()      
         @game_board.each do |array|
-            printed_array = array
+            printed_array = array.dup
             array.each do |index|
                 if index == "S"
-                    printed_array[array.index(index)] = "~"
+                    printed_array[printed_array.index(index)] = "~"
                 end
             end
             print "\n"
@@ -126,11 +129,13 @@ class Board
             @game_board[row][col] = "O"
         elsif @game_board[row][col] == "S"
             @game_board[row][col] = "X"
-        elsif @game_board[row][col] == "X"
+            @game_end_counter -= 1
+        elsif @game_board[row][col] == "X" || @game_board[row][col] == "O"
             puts "You've already aimed here"
         else 
         end 
     end 
+        
 
 end 
 
@@ -140,7 +145,6 @@ class Player
     def initialize(name)
         @name = name 
     end 
-
 end 
 
 puts "Battleships"
@@ -151,45 +155,52 @@ selection = gets.chomp.to_i
 
 case selection 
     when 1 
-            puts "Enter player 1 name:"
-            input1 = gets.chomp
-            first_player = Player.new(input1)
-            puts "Welcome to battle Captain #{first_player.name}"
-            puts "Launching your ships..."
-            sleep 2
-            puts "Captain #{first_player.name}, this is your ship"
-            ship1 = Ship.new()
-            ship1.get_start_coordinates()
-            ship1.get_coordinates()
-            player1 = Board.new 
-            player1.draw_ship(ship1)
-            player1.draw_board()
-            player1.draw_board_hidden()
+        puts "Enter player 1 name:"
+        input1 = gets.chomp
+        first_player = Player.new(input1)
+        puts "Welcome to battle Captain #{first_player.name}"
+        puts "Launching your ships..."
+        sleep 2
+        puts "Captain #{first_player.name}, this is your ship"
+        ship1 = Ship.new()
+        ship1.get_start_coordinates()
+        ship1.get_coordinates()
+        player1 = Board.new 
+        player1.draw_ship(ship1)
+        player1.draw_board()
 
-            puts "Enter player 2 name:"
-            input2 = gets.chomp
-            second_player = Player.new(input2)
-            puts "Welcome to battle Captain #{second_player.name}"
-            puts "Launching your ships..."
-            sleep 2
-            puts "Captain #{second_player.name}, this is your ship"
-            ship2 = Ship.new()
-            ship2.get_start_coordinates()
-            ship2.get_coordinates()
-            player2 = Board.new 
-            player2.draw_ship(ship2)
-            player2.draw_board()
+        puts "Enter player 2 name:"
+        input2 = gets.chomp
+        second_player = Player.new(input2)
+        puts "Welcome to battle Captain #{second_player.name}"
+        puts "Launching your ships..."
+        sleep 2
+        puts "Captain #{second_player.name}, this is your ship"
+        ship2 = Ship.new()
+        ship2.get_start_coordinates()
+        ship2.get_coordinates()
+        player2 = Board.new 
+        player2.draw_ship(ship2)
+        player2.draw_board()
+
+        until player1.game_end_counter == 0 || player2.game_end_counter == 0
 
             puts "Captain #{first_player.name}, fire away"
 
             player2.shoot()
-            player2.draw_board()
+            player2.draw_board_hidden()
+            if player1.game_end_counter == 0 || player2.game_end_counter == 0
+                break
+            end 
 
             puts "Captain #{second_player.name}, fire away"
 
             player1.shoot()
-            player1.draw_board()
-
+            player1.draw_board_hidden()
+            if player1.game_end_counter == 0 || player2.game_end_counter == 0
+                break
+            end 
+        end 
 
     when 2
         puts "Goodbye"
