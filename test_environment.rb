@@ -1,4 +1,4 @@
-size = 3
+size = 3 
 MIN_ROW = 1
 MIN_COL = 1
 MAX_ROW_HORIZ = 10
@@ -83,13 +83,41 @@ class Board
     end 
 
     def shoot()
-        puts "Name your coordinates (row, column) to shoot (ie. 36 or 82)"
-        coordinate = gets.chomp.split(//,2)
-        row = coordinate[0]
-        col = coordinate[1]
-        return row, col
+        puts "Enter your aiming coordinates (ie. A4)"
+        aim = gets.chomp.split(//,2)
+        row = aim[0]
+        col = aim[1].to_i
+        if row == "A"
+            row = 1
+        elsif row == "B"
+            row = 2
+        elsif row == "C"
+            row = 3
+        elsif row == "D"
+            row = 4
+        elsif row == "E"
+            row = 5
+        elsif row == "F"
+            row = 6
+        elsif row == "G"
+            row = 7
+        elsif row == "H"
+            row = 8
+        elsif row == "I"
+            row = 9
+        elsif row == "J"
+            row = 10
+        else
+        end 
+        if @game_board[row][col] == "~"
+            @game_board[row][col] = "O"
+        elsif @game_board[row][col] == "S"
+            @game_board[row][col] = "X"
+        elsif @game_board[row][col] == "X"
+            puts "You've already aimed here"
+        else 
+        end 
     end 
-
 
 end 
 
@@ -103,3 +131,5 @@ player1.draw_ship(ship1)
 
 player1.draw_board()
 
+player1.shoot()
+player1.draw_board()
