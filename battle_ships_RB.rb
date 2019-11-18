@@ -135,8 +135,7 @@ attr_reader :game_end_counter
         else 
         end 
     end 
-        
-
+    
 end 
 
 class Player 
