@@ -1,3 +1,6 @@
+require "colorize"
+require "colorized_string"
+
 MIN_ROW = 1
 MIN_COL = 1
 MAX_ROW_HORIZ = 10
@@ -139,15 +142,16 @@ attr_reader :game_end_counter
         end 
         if @game_board[row][col] == "~"
             @game_board[row][col] = "O"
+            puts "Missed!"
         elsif @game_board[row][col] == "S"
             @game_board[row][col] = "X"
+            puts "Direct Hit Captain!"
             @game_end_counter -= 1
         elsif @game_board[row][col] == "X" || @game_board[row][col] == "O"
             puts "You've already aimed here"
         else 
         end 
     end 
-        
 
 end 
 
@@ -163,7 +167,7 @@ class Player
 end 
 
 puts "Battleships"
-puts "What would you like to do:"
+puts "What would you like to do:".colorize(:red).on_blue
 puts "[1] - Play"
 puts "[2] - Quit"
 selection = gets.chomp.to_i

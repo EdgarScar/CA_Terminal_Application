@@ -1,3 +1,6 @@
+require "colorize"
+require "colorized_string"
+
 MIN_ROW = 1
 MIN_COL = 1
 MAX_ROW_HORIZ = 10
