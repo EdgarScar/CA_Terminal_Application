@@ -1,27 +1,32 @@
-size = 3 
 MIN_ROW = 1
 MIN_COL = 1
 MAX_ROW_HORIZ = 10
-MAX_COL_HORIZ = 10 - (size-1) 
 MAX_COL_VERT = 10 
-MAX_ROW_VERT = 10 - (size-1)
 VERTICAL_ORIENTATION = 1
 HORIZONTAL_ORIENTATION = 2
 
 class Ship 
 attr_reader :coordinates
 
-    def initialize()
-        @size = 3
-        @orientation = rand(VERTICAL_ORIENTATION..HORIZONTAL_ORIENTATION) 
-    end 
+    def initialize(size)
+        @size = size
+        @orientation = rand(VERTICAL_ORIENTATION..HORIZONTAL_ORIENTATION)
+        self.set_coordinates()
+    end
+
+    def set_coordinates() 
+        self.get_start_coordinates()
+        self.get_coordinates()
+    end
 
     def get_start_coordinates() 
         if @orientation == 1
-            @start_coor = [rand(MIN_ROW..MAX_ROW_VERT), rand(MIN_COL..MAX_COL_VERT)]
+            @max_row_vert = 10 - (@size-1)
+            @start_coor = [rand(MIN_ROW..@max_row_vert), rand(MIN_COL..MAX_COL_VERT)]
             return @start_coor
         elsif @orientation == 2
-            @start_coor = [rand(MIN_ROW..MAX_ROW_HORIZ), rand(MIN_COL..MAX_COL_HORIZ)]
+            @max_col_horiz = 10 - (@size-1) 
+            @start_coor = [rand(MIN_ROW..MAX_ROW_HORIZ), rand(MIN_COL..@max_col_horiz)]
             return @start_coor
         else 
         end 
@@ -31,18 +36,17 @@ attr_reader :coordinates
         @coordinates = []
         row = @start_coor[0]
         col = @start_coor[1]
+        @coordinates.push(@start_coor)
         if @orientation == 1
-            coor_second = [row + 1, col]
-            coor_third = [row + 2, col]
-            @coordinates.push(@start_coor)
-            @coordinates.push(coor_second)
-            @coordinates.push(coor_third)
+            for i in 1..(@size-1)
+                coor_additional = [row + i, col]
+                @coordinates.push(coor_additional)
+            end
         elsif @orientation == 2
-            coor_second = [row, col + 1]
-            coor_third = [row, col + 2]
-            @coordinates.push(@start_coor)
-            @coordinates.push(coor_second)
-            @coordinates.push(coor_third)
+            for i in 1..(@size-1)
+                coor_additional = [row, col + i]
+                @coordinates.push(coor_additional)
+            end 
         else 
         end 
     end 
@@ -90,11 +94,31 @@ attr_reader :game_end_counter
         end
     end
             
-    def draw_ship(ship)
-        ship.coordinates.each do |coor|
-            row = coor[0]
-            col = coor[1]
-            @game_board[row][col] = "S"
+    def draw_ship(ship_size)
+        placed_ship = false
+        until placed_ship 
+            ship = Ship.new(ship_size)
+
+            # ship is a boolean that check if ship is clashing with another ship
+            ship_clash = false
+
+            ship.coordinates.each do |coor|
+                if @game_board[coor[0]][coor[1]] == "S"
+                    ship_clash = true
+                end
+            end
+
+            if !ship_clash
+                #put on board
+                ship.coordinates.each do |coor|
+                    row = coor[0]
+                    col = coor[1]
+                    @game_board[row][col] = "S"
+                end
+                placed_ship = true
+            else 
+                puts "Clash!"
+            end
         end 
     end 
 
@@ -135,7 +159,8 @@ attr_reader :game_end_counter
         else 
         end 
     end 
-    
+        
+
 end 
 
 class Player 
@@ -143,7 +168,9 @@ class Player
 
     def initialize(name)
         @name = name 
+        puts "Welcome to battle Captain #{self.name}"
     end 
+    
 end 
 
 puts "Battleships"
@@ -157,29 +184,26 @@ case selection
         puts "Enter player 1 name:"
         input1 = gets.chomp
         first_player = Player.new(input1)
-        puts "Welcome to battle Captain #{first_player.name}"
         puts "Launching your ships..."
         sleep 2
         puts "Captain #{first_player.name}, this is your ship"
-        ship1 = Ship.new()
-        ship1.get_start_coordinates()
-        ship1.get_coordinates()
         player1 = Board.new 
-        player1.draw_ship(ship1)
+        player1.draw_ship(3)
+        player1.draw_ship(3)
+        player1.draw_ship(4)
+        player1.draw_ship(4)
         player1.draw_board()
 
         puts "Enter player 2 name:"
         input2 = gets.chomp
         second_player = Player.new(input2)
-        puts "Welcome to battle Captain #{second_player.name}"
         puts "Launching your ships..."
         sleep 2
-        puts "Captain #{second_player.name}, this is your ship"
-        ship2 = Ship.new()
-        ship2.get_start_coordinates()
-        ship2.get_coordinates()
         player2 = Board.new 
-        player2.draw_ship(ship2)
+        player2.draw_ship(3)
+        player2.draw_ship(3)
+        player2.draw_ship(4)
+        player2.draw_ship(4)
         player2.draw_board()
 
         until player1.game_end_counter == 0 || player2.game_end_counter == 0
