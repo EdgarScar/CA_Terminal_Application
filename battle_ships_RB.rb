@@ -71,9 +71,13 @@ attr_reader :game_end_counter
             print array
             print "\n"
         end 
+        sleep 5
+        system("clear")
+        sleep 1
     end  
 
-    def draw_board_hidden()      
+    def draw_board_hidden()   
+        system("clear")   
         @game_board.each do |array|
             printed_array = array.dup
             array.each do |index|
@@ -85,6 +89,8 @@ attr_reader :game_end_counter
             print printed_array
             print "\n"
         end
+        sleep 5
+        system("clear")
     end
             
     def draw_ship(ship_size)
@@ -110,12 +116,12 @@ attr_reader :game_end_counter
                 end
                 placed_ship = true
             else 
-                puts "Clash!"
             end
         end 
     end 
 
     def shoot()
+        sleep 1
         puts "Enter your aiming coordinates (ie. A4)"
         aim = gets.chomp.split(//,2)
         row = aim[0]
@@ -142,15 +148,23 @@ attr_reader :game_end_counter
             row = 10
         else
         end 
-        if @game_board[row][col] == "~"
-            @game_board[row][col] = "O"
-        elsif @game_board[row][col] == "S"
-            @game_board[row][col] = "X"
-            @game_end_counter -= 1
-        elsif @game_board[row][col] == "X" || @game_board[row][col] == "O"
-            puts "You've already aimed here"
+        if row.class == Integer && col.class == Integer
+            if @game_board[row][col] == "~"
+                @game_board[row][col] = "O"
+                puts "Missed!"
+            elsif @game_board[row][col] == "S"
+                @game_board[row][col] = "X"
+                puts "Direct Hit Captain!"
+                @game_end_counter -= 1
+            elsif @game_board[row][col] == "X" || @game_board[row][col] == "O"
+                puts "You've already aimed here"
+            else 
+                puts "Missed!"
+            end
         else 
+            puts "You misfired Captain"
         end 
+        sleep 1
     end 
         
 
@@ -161,7 +175,7 @@ class Player
 
     def initialize(name)
         @name = name 
-        puts "Welcome to battle Captain #{self.name}"
+        puts "Welcome to battle, Captain #{self.name}"
     end 
 end 
 
@@ -173,30 +187,37 @@ selection = gets.chomp.to_i
 
 case selection 
     when 1 
-        puts "Enter player 1 name:"
+        puts "Enter Player 1 name:"
         input1 = gets.chomp
         first_player = Player.new(input1)
-        puts "Launching your ships..."
         sleep 2
-        puts "Captain #{first_player.name}, this is your ship"
+        puts "Captain #{first_player.name}...this is important..."
+        sleep 2
+        puts "The locations of your ships are about to be revealed..."
+        sleep 2
         player1 = Board.new 
+        player1.draw_ship(2)
         player1.draw_ship(3)
         player1.draw_ship(3)
         player1.draw_ship(4)
-        player1.draw_ship(4)
+        player1.draw_ship(5)
         player1.draw_board()
+        
 
-        puts "Enter player 2 name:"
+        puts "Enter Player 2 name:"
         input2 = gets.chomp
         second_player = Player.new(input2)
-        puts "Launching your ships..."
         sleep 2
-        puts "Captain #{second_player.name}, this is your ship"
+        puts "Captain #{second_player.name}...this is important..."
+        sleep 2
+        puts "The locations of your ships are about to be revealed..."
+        sleep 2
         player2 = Board.new 
+        player2.draw_ship(2)
         player2.draw_ship(3)
         player2.draw_ship(3)
         player2.draw_ship(4)
-        player2.draw_ship(4)
+        player2.draw_ship(5)
         player2.draw_board()
 
         until player1.game_end_counter == 0 || player2.game_end_counter == 0
