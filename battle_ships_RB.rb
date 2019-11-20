@@ -15,24 +15,14 @@ attr_reader :coordinates
     end
 
     def set_coordinates() 
-        self.get_start_coordinates()
-        self.get_coordinates()
-    end
-
-    def get_start_coordinates() 
         if @orientation == 1
             @max_row_vert = 10 - (@size-1)
             @start_coor = [rand(MIN_ROW..@max_row_vert), rand(MIN_COL..MAX_COL_VERT)]
-            return @start_coor
         elsif @orientation == 2
             @max_col_horiz = 10 - (@size-1) 
             @start_coor = [rand(MIN_ROW..MAX_ROW_HORIZ), rand(MIN_COL..@max_col_horiz)]
-            return @start_coor
         else 
         end 
-    end 
-
-    def get_coordinates()
         @coordinates = []
         row = @start_coor[0]
         col = @start_coor[1]
@@ -170,7 +160,6 @@ class Player
         @name = name 
         puts "Welcome to battle Captain #{self.name}"
     end 
-    
 end 
 
 puts "Battleships"
@@ -199,6 +188,7 @@ case selection
         second_player = Player.new(input2)
         puts "Launching your ships..."
         sleep 2
+        puts "Captain #{second_player.name}, this is your ship"
         player2 = Board.new 
         player2.draw_ship(3)
         player2.draw_ship(3)
