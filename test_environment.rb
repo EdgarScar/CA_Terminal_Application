@@ -105,9 +105,7 @@ attr_reader :game_end_counter
                     col = coor[1]
                     @game_board[row][col] = "S"
                 end
-                placed_ship = true
-            else 
-                puts "Clash!"
+                placed_ship = true 
             end
         end 
     end 

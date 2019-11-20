@@ -1,0 +1,9 @@
+## Development Log - Battle Ships RB 
+
+#### Status Update - 15/11/2019 
+
+> The original approach to draw the game board grid was to use use a hash, with the keys being the row labels and the values being arrays. The main reason behind this approach was because when the hash was printed to the screen it looked visually appealing. However, this approach has proved to be difficult because iterating over the keys in the hash and then the subsequent array as the value was beginning to become unnecessarily complex. Instead, I have decided to rejig the game board grid data structure. Instead of using a hash, I will now use arrays within an array. As a number of the methods within the application are required to pinpoint indexes and change their values, I believe this new approach will allow me to write much simpler code as I will be able to more easily iterate over each index of each array within the main array. 
+
+#### Status Update - 17/11/2019 
+
+> The majority of the main features of the application have been written and are functioning on a basic level. The character feature has been completed ahead of schedule, while the other main features have been completed as per schedule. At this stage, no gems have been added, and the application is not visually appealing. Yet, despite the visual drawbacks, the application is running as a minimal viable product. Some testing has occurred and errors and bugs still have been identified, such as when an unexpected or incorrect data type is entered it causes the application to crash. These errors will likely be handled in due course with the begin/rescue tool to display a message to the user to input the correct data type. My Trello board has been useful to maintain a visual representation of my progress with some additional small tasks being added on the go. More work is required to fix the underlying bugs and visuals of the application. 

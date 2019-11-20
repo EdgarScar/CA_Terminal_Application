@@ -2,16 +2,13 @@
 
 ## Statement of Purpose and Scope 
 Battle Ships RB will be a terminal application game similar to the classic board game Battleships. The game involves two players, each having their own grid like playing board. Both players have a certain number of ships that are plotted onto their own respective playing grid. While each player knows the location of their own ships, the location of their opponent’s ships are a mystery. The players then take it in turn to try and guess the location of the other player’s ships using coordinates to strike an attack. The first player that successfully locates all of the other player’s ships wins. 
-
-1. The features of Battle Ships RB will consist of: 
-2. User input for personalised character names; 
-3. Automatically generated game board grids for each player; 
-4. User input to determine the number and size of ships; 
-5. Ability for each user to view their own game board grid before they launch an attack; and
-6. Attack function based on coordinates input by the users. 
-
+The features of Battle Ships RB will consist of: 
+User input for personalised character names; 
+Automatically generated game board grids for each player; 
+User input to determine the number and size of ships; 
+Ability for each user to view their own game board grid before they launch an attack; and
+Attack function based on coordinates input by the users. 
 The purpose of Battle Ships RB is to take a classic, widely known and enjoyed board game and digitally revamp to make it more accessible to a wider demographic of people. The board game version involves physical playing pieces that requires the players to set up, manually move each turn and store securely after playing. If any of the ships, location indicator pins or board pieces are lost the game is rendered unplayable. Additionally, the physical game may not be suitable for younger children as the small pieces could potentially be a choking hazard. These problems are solved by creating a digital version that can be enjoyed easily and safely by people of all ages. A digital version can be played an infinite amount of times without the risk of losing game pieces, the game physical deteriorating or safety concerns involving young children. 
-
 As an application that will be created primarily for entertainment, Battle Ships RB is designed to appeal to a broad target audience, being both genders, from the ages of 5 and up. The game rules and presentation will be designed in a simple, easy to understand way so that the game can be accessible to people with varying degrees of technological ability. Similarly, the use of bright colours, non-offensive graphics and engaging game play will make it appealing to both younger and older generations alike. The storyline and language used will also be appropriate for young children. 
 
 ## Development of Features 
@@ -44,7 +41,6 @@ After the first user’s game board is cleared from the screen, the same process
 
 ## Control Flow Diagram - 
 Logic Board 
-
 ## Implementation Plan 
 Develop an implementation plan which:
 - outlines how each feature will be implemented and a checklist of tasks for each feature
@@ -58,10 +54,6 @@ Write TWO status updates on your application. You must write a status update whe
 - encounter a significant issue, challenge or roadblock
 - are halfway through implementing the features
 - prior to / after testing the application
-
-    ### Status Update - 16/11/2019
-
-The original approach to draw the board was using a hash, with the keys being the row labels and the values being arrays. This approach has proved to be difficult because iterating over a hash and then the array as the value was beginning to become complex. Instead, I have decided to rejig the board matrix and use arrays within arrays. I believe this will allow me to write much simpler code to iterate over each index for the majority of the methods needed within the application. I will also create a ship class that has instance variables of size, starting coordinates and orientation. 
 
 ## Help File* 
 Design a help file which includes a set of instructions which accurately describe how to use and install the application.
@@ -97,3 +89,6 @@ Utilise developer tools to automate the building and testing of the application 
 - packaging the application for use as a module or dependency
 
 
+## Status Update - 15/11/2019
+
+The original approach to draw the board was using a hash, with the keys being the row labels and the values being arrays. This approach has proved to be difficult because iterating over a hash and then the array as the value was beginning to become complex. Instead, I have decided to rejig the board matrix and use arrays within arrays. I believe this will allow me to write much simpler code to iterate over each index for the majority of the methods needed within the application. I will also create a ship class that has instance variables of size, starting coordinates and orientation. 
