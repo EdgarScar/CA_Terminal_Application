@@ -1,5 +1,7 @@
 require "colorize"
 require "colorized_string"
+require "tty-font"
+font = TTY::Font.new(:doom)
 
 MIN_ROW = 1
 MIN_COL = 1
@@ -62,7 +64,7 @@ attr_reader :game_end_counter
         ["I", "~", "~", "~", "~", "~", "~", "~", "~", "~", "~"], 
         ["J", "~", "~", "~", "~", "~", "~", "~", "~", "~", "~"],
         ]
-    @game_end_counter = 3
+    @game_end_counter = 17
     end 
 
     def draw_board()      
@@ -78,7 +80,7 @@ attr_reader :game_end_counter
                 elsif element == "O"
                     print "  " + element.colorize(:light_green) + "  "
                 else
-                    print "  " + element + "  "
+                    print "  " + element.colorize(:white) + "  "
                 end
             end
             print "\n"
@@ -106,7 +108,7 @@ attr_reader :game_end_counter
                 elsif new_index == "O"
                     print "  " + new_index.colorize(:light_green) + "  "
                 else
-                    print "  " + new_index + "  "
+                    print "  " + new_index.colorize(:white) + "  "
                 end
             end
             print "\n"
@@ -144,9 +146,9 @@ attr_reader :game_end_counter
 
     def shoot()
         sleep 1
-        puts "Enter your aiming coordinates (ie. A4)"
+        puts "Enter your aiming coordinates (ie. A4)".colorize(:yellow)
         aim = gets.chomp.split(//,2)
-        row = aim[0]
+        row = aim[0].capitalize
         col = aim[1].to_i
         if row == "A"
             row = 1
@@ -173,23 +175,21 @@ attr_reader :game_end_counter
         if row.class == Integer && col.class == Integer
             if @game_board[row][col] == "~"
                 @game_board[row][col] = "O"
-                puts "Missed!"
+                puts "Missed!".colorize(:yellow)
             elsif @game_board[row][col] == "S"
                 @game_board[row][col] = "X"
-                puts "Direct Hit Captain!"
+                puts "Direct Hit Captain!".colorize(:yellow)
                 @game_end_counter -= 1
             elsif @game_board[row][col] == "X" || @game_board[row][col] == "O"
-                puts "You've already aimed here Captain"
+                puts "You've already aimed here Captain".colorize(:yellow)
             else 
-                puts "Missed!"
+                puts "Missed!".colorize(:yellow)
             end
         else 
-            puts "You misfired Captain"
+            puts "You misfired Captain".colorize(:yellow)
         end 
         sleep 1
     end 
-        
-
 end 
 
 class Player 
@@ -197,118 +197,123 @@ class Player
 
     def initialize(name)
         @name = name 
-        puts "Welcome to battle, Captain #{self.name}"
+        puts "Welcome to battle, Captain #{self.name}".colorize(:yellow)
     end 
 end 
 
-puts "Battleships"
+puts font.write("BATTLE SHIPS").colorize(:red)
+play_again = false
 decision = false 
-until decision 
-    puts "What would you like to do:"
-    puts "[1] - Play"
-    puts "[2] - Quit"
-    selection = gets.chomp.to_i  
-    if selection == 1 || selection == 2
-        decision = true
-    end 
-end 
-
-# until x
-#     input = gets.chomp.to_i
-# end
-
-# def get_input(args) #[]
-#     args.each do |arg|
-#         puts arg
-#     end
-#     until x
-#         input = gets.chomp.to_i
-#         if (1..args.length+1) then x
-#     end
-# end
-# input = get_input(["1 to play", "2 to quit"])
-
-case selection 
-    when 1
-        puts "Enter Player 1 name:"
-        input1 = gets.chomp
-        first_player = Player.new(input1)
-        sleep 2
-        puts "Captain #{first_player.name}...this is important..."
-        sleep 2
-        puts "The locations of your ships are about to be revealed..."
-        sleep 2
-        player1 = Board.new 
-        player1.draw_ship(2)
-        player1.draw_ship(3)
-        player1.draw_ship(3)
-        player1.draw_ship(4)
-        player1.draw_ship(5)
-        player1.draw_board()
-        
-        puts "Enter Player 2 name:"
-        input2 = gets.chomp
-        second_player = Player.new(input2)
-        sleep 2
-        puts "Captain #{second_player.name}...this is important..."
-        sleep 2
-        puts "The locations of your ships are about to be revealed..."
-        sleep 2
-        player2 = Board.new 
-        player2.draw_ship(2)
-        player2.draw_ship(3)
-        player2.draw_ship(3)
-        player2.draw_ship(4)
-        player2.draw_ship(5)
-        player2.draw_board()
-
-        until player1.game_end_counter == 0 || player2.game_end_counter == 0
-            shot_fired = false
-            until shot_fired 
-                puts "Captain #{first_player.name}, what are your orders?"
-                puts "[1] - View status of our ships"
-                puts "[2] - View previous attacks"
-                puts "[3] - Launch attack on the enemy"
-                orders = gets.chomp.to_i
-                    if orders == 1
-                        player1.draw_board()
-                    elsif orders == 2
-                        player2.draw_board_hidden()
-                    elsif orders == 3
-                        player2.shoot()
-                        player2.draw_board_hidden()
-                        shot_fired = true
-                    else 
-                    end   
-                if player1.game_end_counter == 0 || player2.game_end_counter == 0
-                    break
-                end 
-            end 
-
-            shot_fired = false
-            until shot_fired 
-                puts "Captain #{second_player.name}, what are your orders?"
-                puts "[1] - View status of our ships"
-                puts "[2] - View previous attacks"
-                puts "[3] - Launch attack on the enemy"
-                orders = gets.chomp.to_i
-                    if orders == 1
-                        player2.draw_board()
-                    elsif orders == 2
-                        player1.draw_board_hidden()
-                    elsif orders == 3
-                        player1.shoot()
-                        player1.draw_board_hidden()
-                        shot_fired = true
-                    else 
-                    end   
-                if player1.game_end_counter == 0 || player2.game_end_counter == 0
-                    break
-                end 
-            end 
+until play_again 
+    until decision 
+        puts "What would you like to do:".colorize(:yellow)
+        puts "[1] - Play".colorize(:yellow)
+        puts "[2] - Quit".colorize(:yellow)
+        selection = gets.chomp.to_i  
+        if selection == 1 || selection == 2
+            decision = true
         end 
-    when 2
-        puts "Goodbye"
+    end 
+
+    case selection 
+        when 1
+            puts "Enter Player 1 name:".colorize(:yellow)
+            input1 = gets.chomp
+            first_player = Player.new(input1)
+            sleep 2
+            puts "Captain #{first_player.name}...this is important...".colorize(:yellow)
+            sleep 2
+            puts "The locations of your ships are about to be revealed...".colorize(:yellow)
+            sleep 2
+            player1 = Board.new 
+            player1.draw_ship(2)
+            player1.draw_ship(3)
+            player1.draw_ship(3)
+            player1.draw_ship(4)
+            player1.draw_ship(5)
+            player1.draw_board()
+            
+            puts "Enter Player 2 name:".colorize(:yellow)
+            input2 = gets.chomp
+            second_player = Player.new(input2)
+            sleep 2
+            puts "Captain #{second_player.name}...this is important...".colorize(:yellow)
+            sleep 2
+            puts "The locations of your ships are about to be revealed...".colorize(:yellow)
+            sleep 2
+            player2 = Board.new 
+            player2.draw_ship(2)
+            player2.draw_ship(3)
+            player2.draw_ship(3)
+            player2.draw_ship(4)
+            player2.draw_ship(5)
+            player2.draw_board()
+
+            until player1.game_end_counter == 0 || player2.game_end_counter == 0
+                shot_fired = false
+                until shot_fired 
+                    puts "Captain #{first_player.name}, what are your orders?".colorize(:yellow)
+                    puts "[1] - View status of our ships".colorize(:yellow)
+                    puts "[2] - View previous attacks".colorize(:yellow)
+                    puts "[3] - Launch attack on the enemy".colorize(:yellow)
+                    orders = gets.chomp.to_i
+                        if orders == 1
+                            player1.draw_board()
+                        elsif orders == 2
+                            player2.draw_board_hidden()
+                        elsif orders == 3
+                            player2.shoot()
+                            player2.draw_board_hidden()
+                            shot_fired = true
+                        else 
+                        end   
+                end 
+
+                if player1.game_end_counter == 0 || player2.game_end_counter == 0
+                    break
+                end 
+
+                shot_fired = false
+                until shot_fired 
+                    puts "Captain #{second_player.name}, what are your orders?".colorize(:yellow)
+                    puts "[1] - View status of our ships".colorize(:yellow)
+                    puts "[2] - View previous attacks".colorize(:yellow)
+                    puts "[3] - Launch attack on the enemy".colorize(:yellow)
+                    orders = gets.chomp.to_i
+                        if orders == 1
+                            player2.draw_board()
+                        elsif orders == 2
+                            player1.draw_board_hidden()
+                        elsif orders == 3
+                            player1.shoot()
+                            player1.draw_board_hidden()
+                            shot_fired = true
+                        else 
+                        end   
+                end 
+                if player1.game_end_counter == 0 || player2.game_end_counter == 0
+                    break
+                end 
+            end 
+            if player1.game_end_counter == 0 
+                puts "Congratulations Captain #{first_player.name}!".colorize(:yellow)
+                puts "You've defeated your enemy, #{second_player.name}!".colorize(:yellow)
+            else 
+                puts "Congratulations Captain #{second_player.name}!".colorize(:yellow)
+                puts "You've defeated your enemy, #{first_player.name}!".colorize(:yellow)
+            end 
+        when 2
+            puts "Okay, Goodbye".colorize(:yellow)
+        else 
+        end 
+    puts "What would you like to do:".colorize(:yellow)
+    puts "[1] - Play Again?".colorize(:yellow)
+    puts "[2] - Quit".colorize(:yellow)
+    again = gets.chomp.to_i
+    if again == 1
+        play_again = false
     else 
-        puts "No dice" 
+        puts "Okay, Goodbye".colorize(:yellow)
+        play_again = true
+    end  
 end 
