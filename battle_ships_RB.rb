@@ -180,13 +180,20 @@ class Player
 end 
 
 puts "Battleships"
-puts "What would you like to do:"
-puts "[1] - Play"
-puts "[2] - Quit"
-selection = gets.chomp.to_i
+selection_made = false
+until selection_made
+    puts "What would you like to do:"
+    puts "[1] - Play"
+    puts "[2] - Quit"
+    selection = gets.chomp
+    if selection == "1" || "2"
+        selection_made = true
+    else
+    end 
+ 
 
 case selection 
-    when 1 
+    when "1"
         puts "Enter Player 1 name:"
         input1 = gets.chomp
         first_player = Player.new(input1)
@@ -239,8 +246,8 @@ case selection
             end 
         end 
 
-    when 2
+    when "2"
         puts "Goodbye"
     else 
-        puts "No valid"
+        puts "Please make a valid selection" 
 end 
