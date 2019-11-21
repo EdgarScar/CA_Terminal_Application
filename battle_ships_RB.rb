@@ -1,3 +1,4 @@
+require "tty-progressbar"
 require "colorize"
 require "colorized_string"
 require "tty-font"
@@ -221,10 +222,13 @@ until play_again
             input1 = gets.chomp
             first_player = Player.new(input1)
             sleep 2
-            puts "Captain #{first_player.name}...this is important...".colorize(:yellow)
-            sleep 2
-            puts "The locations of your ships are about to be revealed...".colorize(:yellow)
-            sleep 2
+            puts "Captain #{first_player.name}, your ships are about to launch...".colorize(:yellow)
+            sleep 1
+            bar = TTY::ProgressBar.new("Launching Ships [:bar]".colorize(:yellow), total: 30)
+                30.times do
+                sleep(0.1)
+                bar.advance(1)
+                end
             player1 = Board.new 
             player1.draw_ship(2)
             player1.draw_ship(3)
@@ -237,10 +241,13 @@ until play_again
             input2 = gets.chomp
             second_player = Player.new(input2)
             sleep 2
-            puts "Captain #{second_player.name}...this is important...".colorize(:yellow)
-            sleep 2
-            puts "The locations of your ships are about to be revealed...".colorize(:yellow)
-            sleep 2
+            puts "Captain #{second_player.name}, your ships are about to launch...".colorize(:yellow)
+            sleep 1
+            bar = TTY::ProgressBar.new("Launching Ships [:bar]".colorize(:yellow), total: 30)
+                30.times do
+                sleep(0.1)
+                bar.advance(1)
+                end
             player2 = Board.new 
             player2.draw_ship(2)
             player2.draw_ship(3)
