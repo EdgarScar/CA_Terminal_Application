@@ -4,6 +4,7 @@ require "colorized_string"
 require "tty-font"
 font = TTY::Font.new(:doom)
 
+# Constant variables are defined to ensure ships are not played beyond the game board grip.
 MIN_ROW = 1
 MIN_COL = 1
 MAX_ROW_HORIZ = 10
@@ -11,6 +12,7 @@ MAX_COL_VERT = 10
 VERTICAL_ORIENTATION = 1
 HORIZONTAL_ORIENTATION = 2
 
+# Ship class is created to establish coordinates for a new ship to be placed on the game board grid.
 class Ship 
 attr_reader :coordinates
 
@@ -19,7 +21,7 @@ attr_reader :coordinates
         @orientation = rand(VERTICAL_ORIENTATION..HORIZONTAL_ORIENTATION)
         self.set_coordinates()
     end
-
+# A class method is used, along with the constant variables, to establish a ship's coordinates. 
     def set_coordinates() 
         if @orientation == 1
             @max_row_vert = 10 - (@size-1)
@@ -48,9 +50,11 @@ attr_reader :coordinates
     end 
 end 
 
+# Board class is necessary as all a player's ships, hits and misses will be represented on a different instance. 
 class Board
 attr_reader :game_end_counter
 
+# An array of arrays is used to create the game board grid to make iteration easier.
     def initialize()
     @game_board = [
         ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10"],
@@ -65,9 +69,11 @@ attr_reader :game_end_counter
         ["I", "~", "~", "~", "~", "~", "~", "~", "~", "~", "~"], 
         ["J", "~", "~", "~", "~", "~", "~", "~", "~", "~", "~"],
         ]
+# This variable is used to count down every time a ship is hit. When a player has no count left, the game ends. 
     @game_end_counter = 17
     end 
 
+# A class method is used to draw the inital game board grid with the player's ship locations 
     def draw_board()      
         @game_board.each do |array|
             print "\n"
@@ -91,6 +97,8 @@ attr_reader :game_end_counter
         sleep 1
     end  
 
+# A class method is used to draw the game board grid of the opponent. This ships are hidden, while
+# the hits and misses are displayed. 
     def draw_board_hidden()   
         system("clear")   
         @game_board.each do |array|
@@ -117,23 +125,21 @@ attr_reader :game_end_counter
         sleep 5
         system("clear")
     end
-            
+    
+# A class method is used to plot plot a ship onto the player's game board grid. 
     def draw_ship(ship_size)
         placed_ship = false
+# An until loop uses a boolean that will check if ship is clashing with another ship.
         until placed_ship 
             ship = Ship.new(ship_size)
-
-            # ship is a boolean that check if ship is clashing with another ship
             ship_clash = false
-
             ship.coordinates.each do |coor|
                 if @game_board[coor[0]][coor[1]] == "S"
                     ship_clash = true
                 end
             end
-
+# If a ship clash does not occur, the ship will be printed to the game board grid. 
             if !ship_clash
-                #put on board
                 ship.coordinates.each do |coor|
                     row = coor[0]
                     col = coor[1]
@@ -145,6 +151,7 @@ attr_reader :game_end_counter
         end 
     end 
 
+# A class method is used to prompt the user to input coordinates to aim their attack. 
     def shoot()
         sleep 1
         puts "Enter your aiming coordinates (ie. A4)".colorize(:yellow)
@@ -173,6 +180,7 @@ attr_reader :game_end_counter
             row = 10
         else
         end 
+# The coordinates are then plotted onto the game board as either a hit or a miss. 
         if row.class == Integer && col.class == Integer
             if @game_board[row][col] == "~"
                 @game_board[row][col] = "O"
@@ -193,6 +201,7 @@ attr_reader :game_end_counter
     end 
 end 
 
+# A player class is used to facilitate the Character Name feature.
 class Player 
     attr_reader :name
 
@@ -202,10 +211,13 @@ class Player
     end 
 end 
 
+# The game application runs from the code below. 
 puts font.write("BATTLE SHIPS").colorize(:red)
 play_again = false
 decision = false 
+# An until loop is used to play multiple games. 
 until play_again 
+# An until loop is used to ensure a valid selection is made. 
     until decision 
         puts "What would you like to do:".colorize(:yellow)
         puts "[1] - Play".colorize(:yellow)
@@ -215,40 +227,46 @@ until play_again
             decision = true
         end 
     end 
-
+# A case/when statement is used to run the body of the game code. 
     case selection 
         when 1
+# The first player is created and a name is input. 
             puts "Enter Player 1 name:".colorize(:yellow)
             input1 = gets.chomp
             first_player = Player.new(input1)
             sleep 2
             puts "Captain #{first_player.name}, your ships are about to launch...".colorize(:yellow)
-            sleep 1
+            sleep 2
             bar = TTY::ProgressBar.new("Launching Ships [:bar]".colorize(:yellow), total: 30)
                 30.times do
                 sleep(0.1)
                 bar.advance(1)
                 end
+# A new instance of the game board class is created for player one. 
             player1 = Board.new 
+# Player one's ships are generated and plotted on the game board grip. 
             player1.draw_ship(2)
             player1.draw_ship(3)
             player1.draw_ship(3)
             player1.draw_ship(4)
             player1.draw_ship(5)
             player1.draw_board()
-            
+
+# The first player is created and a name is input. 
             puts "Enter Player 2 name:".colorize(:yellow)
             input2 = gets.chomp
             second_player = Player.new(input2)
             sleep 2
             puts "Captain #{second_player.name}, your ships are about to launch...".colorize(:yellow)
-            sleep 1
+            sleep 2
             bar = TTY::ProgressBar.new("Launching Ships [:bar]".colorize(:yellow), total: 30)
                 30.times do
                 sleep(0.1)
                 bar.advance(1)
                 end
+# A new instance of the game board class is created for player two. 
             player2 = Board.new 
+# Player two's ships are generated and plotted on the game board grip. 
             player2.draw_ship(2)
             player2.draw_ship(3)
             player2.draw_ship(3)
@@ -256,8 +274,10 @@ until play_again
             player2.draw_ship(5)
             player2.draw_board()
 
+# An until loop is used to break the code when either player wins the game. 
             until player1.game_end_counter == 0 || player2.game_end_counter == 0
                 shot_fired = false
+# An until loop is used to only progress to the next player when an attack is launched. 
                 until shot_fired 
                     puts "Captain #{first_player.name}, what are your orders?".colorize(:yellow)
                     puts "[1] - View status of our ships".colorize(:yellow)
@@ -275,11 +295,11 @@ until play_again
                         else 
                         end   
                 end 
-
+# An if statment is used to end the game at this point if player one has won the game.
                 if player1.game_end_counter == 0 || player2.game_end_counter == 0
                     break
                 end 
-
+# An until loop is used to only progress to the next player when an attack is launched. 
                 shot_fired = false
                 until shot_fired 
                     puts "Captain #{second_player.name}, what are your orders?".colorize(:yellow)
@@ -298,10 +318,12 @@ until play_again
                         else 
                         end   
                 end 
+# An if statment is used to end the game at this point if player two has won the game.
                 if player1.game_end_counter == 0 || player2.game_end_counter == 0
                     break
                 end 
             end 
+# An if statement is used to tell the winner they have won the game. 
             if player1.game_end_counter == 0 
                 puts "Congratulations Captain #{first_player.name}!".colorize(:yellow)
                 puts "You've defeated your enemy, #{second_player.name}!".colorize(:yellow)
@@ -313,6 +335,7 @@ until play_again
             puts "Okay, Goodbye".colorize(:yellow)
         else 
         end 
+# Once a game has ended, the users have a choice to play again or quit. 
     puts "What would you like to do:".colorize(:yellow)
     puts "[1] - Play Again?".colorize(:yellow)
     puts "[2] - Quit".colorize(:yellow)
