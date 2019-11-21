@@ -1,4 +1,4 @@
-# Battle Ships - Software Development Plan 
+# Battle Ships RB - Software Development Plan 
 ## Statement of Purpose and Scope 
 Battle Ships RB will be a terminal application game similar to the classic board game Battleships. The game involves two players, each having their own grid like playing board. Both players have a certain number of ships that are plotted onto their own respective playing grid. While each player knows the location of their own ships, the location of their opponent’s ships are a mystery. The players then take it in turn to try and guess the location of the other player’s ships using coordinates to strike an attack. The first player that successfully locates all of the other player’s ships wins. 
 

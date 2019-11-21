@@ -68,7 +68,19 @@ attr_reader :game_end_counter
     def draw_board()      
         @game_board.each do |array|
             print "\n"
-            print array
+            array.each do |element| 
+                if element == "~"
+                    print "  " + element.colorize(:blue) + "  "
+                elsif element == "S"
+                    print "  " + element.colorize(:yellow).on_yellow + "  "
+                elsif element == "X"
+                    print "  " + element.colorize(:red).on_red + "  "
+                elsif element == "O"
+                    print "  " + element.colorize(:light_green) + "  "
+                else
+                    print "  " + element + "  "
+                end
+            end
             print "\n"
         end 
         sleep 5
@@ -86,7 +98,17 @@ attr_reader :game_end_counter
                 end
             end
             print "\n"
-            print printed_array
+            printed_array.each do |new_index|
+                if new_index == "~"
+                    print "  " + new_index.colorize(:blue) + "  "
+                elsif new_index == "X"
+                    print "  " + new_index.colorize(:red).on_red + "  "
+                elsif new_index == "O"
+                    print "  " + new_index.colorize(:light_green) + "  "
+                else
+                    print "  " + new_index + "  "
+                end
+            end
             print "\n"
         end
         sleep 5
@@ -157,7 +179,7 @@ attr_reader :game_end_counter
                 puts "Direct Hit Captain!"
                 @game_end_counter -= 1
             elsif @game_board[row][col] == "X" || @game_board[row][col] == "O"
-                puts "You've already aimed here"
+                puts "You've already aimed here Captain"
             else 
                 puts "Missed!"
             end
@@ -180,20 +202,34 @@ class Player
 end 
 
 puts "Battleships"
-selection_made = false
-until selection_made
+decision = false 
+until decision 
     puts "What would you like to do:"
     puts "[1] - Play"
     puts "[2] - Quit"
-    selection = gets.chomp
-    if selection == "1" || "2"
-        selection_made = true
-    else
+    selection = gets.chomp.to_i  
+    if selection == 1 || selection == 2
+        decision = true
     end 
- 
+end 
+
+# until x
+#     input = gets.chomp.to_i
+# end
+
+# def get_input(args) #[]
+#     args.each do |arg|
+#         puts arg
+#     end
+#     until x
+#         input = gets.chomp.to_i
+#         if (1..args.length+1) then x
+#     end
+# end
+# input = get_input(["1 to play", "2 to quit"])
 
 case selection 
-    when "1"
+    when 1
         puts "Enter Player 1 name:"
         input1 = gets.chomp
         first_player = Player.new(input1)
@@ -210,7 +246,6 @@ case selection
         player1.draw_ship(5)
         player1.draw_board()
         
-
         puts "Enter Player 2 name:"
         input2 = gets.chomp
         second_player = Player.new(input2)
@@ -228,26 +263,52 @@ case selection
         player2.draw_board()
 
         until player1.game_end_counter == 0 || player2.game_end_counter == 0
-
-            puts "Captain #{first_player.name}, fire away"
-
-            player2.shoot()
-            player2.draw_board_hidden()
-            if player1.game_end_counter == 0 || player2.game_end_counter == 0
-                break
+            shot_fired = false
+            until shot_fired 
+                puts "Captain #{first_player.name}, what are your orders?"
+                puts "[1] - View status of our ships"
+                puts "[2] - View previous attacks"
+                puts "[3] - Launch attack on the enemy"
+                orders = gets.chomp.to_i
+                    if orders == 1
+                        player1.draw_board()
+                    elsif orders == 2
+                        player2.draw_board_hidden()
+                    elsif orders == 3
+                        player2.shoot()
+                        player2.draw_board_hidden()
+                        shot_fired = true
+                    else 
+                    end   
+                if player1.game_end_counter == 0 || player2.game_end_counter == 0
+                    break
+                end 
             end 
 
-            puts "Captain #{second_player.name}, fire away"
-
-            player1.shoot()
-            player1.draw_board_hidden()
-            if player1.game_end_counter == 0 || player2.game_end_counter == 0
-                break
+            shot_fired = false
+            until shot_fired 
+                puts "Captain #{second_player.name}, what are your orders?"
+                puts "[1] - View status of our ships"
+                puts "[2] - View previous attacks"
+                puts "[3] - Launch attack on the enemy"
+                orders = gets.chomp.to_i
+                    if orders == 1
+                        player2.draw_board()
+                    elsif orders == 2
+                        player1.draw_board_hidden()
+                    elsif orders == 3
+                        player1.shoot()
+                        player1.draw_board_hidden()
+                        shot_fired = true
+                    else 
+                    end   
+                if player1.game_end_counter == 0 || player2.game_end_counter == 0
+                    break
+                end 
             end 
         end 
-
-    when "2"
+    when 2
         puts "Goodbye"
     else 
-        puts "Please make a valid selection" 
+        puts "No dice" 
 end 
