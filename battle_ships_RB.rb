@@ -1,6 +1,5 @@
 require "tty-progressbar"
 require "colorize"
-require "colorized_string"
 require "tty-font"
 font = TTY::Font.new(:doom)
 
@@ -184,18 +183,18 @@ attr_reader :game_end_counter
         if row.class == Integer && col.class == Integer
             if @game_board[row][col] == "~"
                 @game_board[row][col] = "O"
-                puts "Missed!".colorize(:yellow)
+                puts "Missed!".colorize(:light_green)
             elsif @game_board[row][col] == "S"
                 @game_board[row][col] = "X"
-                puts "Direct Hit Captain!".colorize(:yellow)
+                puts "Direct Hit Captain!".colorize(:red)
                 @game_end_counter -= 1
             elsif @game_board[row][col] == "X" || @game_board[row][col] == "O"
-                puts "You've already aimed here Captain".colorize(:yellow)
+                puts "You've already aimed here Captain.".colorize(:yellow)
             else 
-                puts "Missed!".colorize(:yellow)
+                puts "Missed!".colorize(:light_green)
             end
         else 
-            puts "You misfired Captain".colorize(:yellow)
+            puts "Incorrect coordinates - Misfire!".colorize(:light_green)
         end 
         sleep 1
     end 
@@ -207,7 +206,7 @@ class Player
 
     def initialize(name)
         @name = name 
-        puts "Welcome to battle, Captain #{self.name}".colorize(:yellow)
+        puts "Welcome to battle, Captain #{self.name}.".colorize(:yellow)
     end 
 end 
 
@@ -237,7 +236,7 @@ until play_again
             sleep 2
             puts "Captain #{first_player.name}, your ships are about to launch...".colorize(:yellow)
             sleep 2
-            bar = TTY::ProgressBar.new("Launching Ships [:bar]".colorize(:yellow), total: 30)
+            bar = TTY::ProgressBar.new("Launching Ships [:bar]".colorize(:blue), total: 30)
                 30.times do
                 sleep(0.1)
                 bar.advance(1)
@@ -259,7 +258,7 @@ until play_again
             sleep 2
             puts "Captain #{second_player.name}, your ships are about to launch...".colorize(:yellow)
             sleep 2
-            bar = TTY::ProgressBar.new("Launching Ships [:bar]".colorize(:yellow), total: 30)
+            bar = TTY::ProgressBar.new("Launching Ships [:bar]".colorize(:blue), total: 30)
                 30.times do
                 sleep(0.1)
                 bar.advance(1)
@@ -295,7 +294,7 @@ until play_again
                         else 
                         end   
                 end 
-# An if statment is used to end the game at this point if player one has won the game.
+# An if statment is used to end the game at this point if player one has won the game. 
                 if player1.game_end_counter == 0 || player2.game_end_counter == 0
                     break
                 end 
@@ -333,6 +332,7 @@ until play_again
             end 
         when 2
             puts "Okay, Goodbye".colorize(:yellow)
+            exit 
         else 
         end 
 # Once a game has ended, the users have a choice to play again or quit. 
