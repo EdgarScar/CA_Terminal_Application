@@ -206,7 +206,6 @@ class Player
 
     def initialize(name)
         @name = name 
-        puts "Welcome to battle, Captain #{self.name}.".colorize(:yellow)
     end 
 end 
 
@@ -230,11 +229,22 @@ until play_again
     case selection 
         when 1
 # The first player is created and a name is input. 
-            puts "Enter Player 1 name:".colorize(:yellow)
-            input1 = gets.chomp
-            first_player = Player.new(input1)
+            name_saved = false
+            until name_saved
+                puts "Enter Player 1 name:".colorize(:yellow)
+                input1 = gets.chomp
+                if input1.length > 20
+                    puts "Your name is too long, enter a shorter name!".colorize(:red)
+                else 
+                    first_player = Player.new(input1)
+                    name_saved = true
+                end 
+            end 
+            puts "Welcome to battle, Captain #{first_player.name}.".colorize(:yellow)
             sleep 2
             puts "Captain #{first_player.name}, your ships are about to launch...".colorize(:yellow)
+            sleep 1
+            puts "Don't let your enemy see!".colorize(:red)
             sleep 2
             bar = TTY::ProgressBar.new("Launching Ships [:bar]".colorize(:blue), total: 30)
                 30.times do
@@ -252,11 +262,22 @@ until play_again
             player1.draw_board()
 
 # The first player is created and a name is input. 
-            puts "Enter Player 2 name:".colorize(:yellow)
-            input2 = gets.chomp
-            second_player = Player.new(input2)
+            name_saved = false
+            until name_saved
+                puts "Enter Player 2 name:".colorize(:yellow)
+                input2 = gets.chomp
+                if input2.length > 20
+                    puts "Your name is too long, enter a shorter name!".colorize(:red)
+                else 
+                    second_player = Player.new(input2)
+                    name_saved = true
+                end 
+            end 
+            puts "Welcome to battle, Captain #{second_player.name}.".colorize(:yellow)
             sleep 2
             puts "Captain #{second_player.name}, your ships are about to launch...".colorize(:yellow)
+            sleep 1
+            puts "Don't let your enemy see!".colorize(:red)            
             sleep 2
             bar = TTY::ProgressBar.new("Launching Ships [:bar]".colorize(:blue), total: 30)
                 30.times do
@@ -278,7 +299,8 @@ until play_again
                 shot_fired = false
 # An until loop is used to only progress to the next player when an attack is launched. 
                 until shot_fired 
-                    puts "Captain #{first_player.name}, what are your orders?".colorize(:yellow)
+                    puts "Captain #{first_player.name}, what are your orders?".colorize(:blue)
+                    puts "\n"
                     puts "[1] - View status of our ships".colorize(:yellow)
                     puts "[2] - View previous attacks".colorize(:yellow)
                     puts "[3] - Launch attack on the enemy".colorize(:yellow)
@@ -301,7 +323,8 @@ until play_again
 # An until loop is used to only progress to the next player when an attack is launched. 
                 shot_fired = false
                 until shot_fired 
-                    puts "Captain #{second_player.name}, what are your orders?".colorize(:yellow)
+                    puts "Captain #{second_player.name}, what are your orders?".colorize(:blue)
+                    puts "\n"
                     puts "[1] - View status of our ships".colorize(:yellow)
                     puts "[2] - View previous attacks".colorize(:yellow)
                     puts "[3] - Launch attack on the enemy".colorize(:yellow)
